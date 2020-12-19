@@ -10,6 +10,9 @@ import Container from '@material-ui/core/Container';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import axios from 'axios';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +45,7 @@ export default function Lyrics() {
     const [lines,setLines] = useState(0);
 
     const [msj, setMsj] = useState("");
+    const [language, setLanguage] = useState("");
   
 
     useEffect(()=>{
@@ -66,7 +70,10 @@ export default function Lyrics() {
     useEffect(()=>{
        
         axios.post('http://localhost:8000/translate',{
-            lyrics: lyrics
+            lyrics: lyrics,
+            author: author,
+            song: song,
+            language: language,
         })
         .then(res => {
             console.log(res)
@@ -78,7 +85,7 @@ export default function Lyrics() {
             setMsj('There was an error while translating the song!')
         })
     }
-    ,[lyrics])
+    ,[lyrics,language])
 
 
     function requestLyrics(){
@@ -149,6 +156,22 @@ export default function Lyrics() {
               value={song}
               onChange={(x)=>setSong(x.target.value)}
             />
+            <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel htmlFor="outlined-age-native-simple">Language</InputLabel>
+                    <Select
+                    native
+                    value={language}
+                    onChange={(x)=>setLanguage(x.target.value)}
+                    label="Language"
+                    inputProps={{
+                        name: 'Language',
+                        id: 'outlined-age-native-simple',
+                    }}
+                    >
+                    <option value={"es_CO"}>English</option>
+                    <option value={"de_DE"}>German</option>
+                    </Select>
+            </FormControl>
             <Button
               type="submit"
               fullWidth
