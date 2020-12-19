@@ -45,16 +45,15 @@ export default function Lyrics() {
     const [lines,setLines] = useState(0);
 
     const [msj, setMsj] = useState("");
-    const [language, setLanguage] = useState("");
+    const [language, setLanguage] = useState("es_CO");
   
-
+    //Solicitar sonteo de lineas y palabras al backend
     useEffect(()=>{
        
         axios.post('http://localhost:8000/count',{
             lyrics: lyrics
         })
         .then(res => {
-            console.log(res)
             if(res.status===200){
                 setLines(res.data.lines)
                 setWords(res.data.words)
@@ -66,7 +65,7 @@ export default function Lyrics() {
     }
     ,[lyrics])
 
-
+   //Realizar Traduccion cuando cambia la variable de estado lyrics
     useEffect(()=>{
        
         axios.post('http://localhost:8000/translate',{
@@ -76,7 +75,6 @@ export default function Lyrics() {
             language: language,
         })
         .then(res => {
-            console.log(res)
             if(res.status===200){
                 setSpanishLyrics(res.data.spanishLyrics)
             }            
@@ -88,18 +86,17 @@ export default function Lyrics() {
     ,[lyrics,language])
 
 
+    //Funcion para solicitar la lyrics a la API 
     function requestLyrics(){
         
         var newAuthor = author.replace(/ /g,"%20");
         var newSong = song.replace(/ /g,"%20");
 
         let URL = 'https://api.lyrics.ovh/v1/'+newAuthor+"/"+newSong
-
-        console.log(URL)
     
         axios.get(URL)
         .then(res => {
-            console.log(res)
+            
             if(res.status===200){
                 if(res.data.lyrics!==""){
                     setLyrics(res.data.lyrics)

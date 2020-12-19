@@ -6,7 +6,6 @@ const cors = require('cors')
 const counter = require('./routes/counter');
 const translation = require('./routes/translation');
 
-const database = require('./database/config');
 
 const app = express();
 var bodyParser = require("body-parser"); // middleware  to handle HTTP POST request

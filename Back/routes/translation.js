@@ -8,12 +8,12 @@ const headers = {
     'Authorization': process.env.NODE_ENV_AUTH,
 }
 
-
+//Almacenamiento de canciones traducidas
 var translatedLyrics = {
 
 }
 
-
+//Funcion para buscar si la cancion consultada ya ha sido traducida
 function searchSong(language,author,song){
 
     if(translatedLyrics[language]){
@@ -28,7 +28,7 @@ function searchSong(language,author,song){
     }  
 }
 
-
+//Funcion para almacenar la letra traducida de una cancion nueva
 function saveNewSong(language,translation, author, song){
 
     if(!translatedLyrics[language])translatedLyrics[language] = {}
@@ -39,6 +39,8 @@ function saveNewSong(language,translation, author, song){
     
 }
 
+
+//Post request:  Traducir una letra de una cancion 
 router.post('/translate', (req, res) => {
 
     var author = req.body.author;
@@ -50,7 +52,7 @@ router.post('/translate', (req, res) => {
         return res.json({spanishLyrics:translatedLyrics[language][author][song]})
     }
     else{
-
+        
         if(req.body.lyrics!==""){
             axios.post('https://api-b2b.backenster.com/b1/api/v3/translate',{
                 from: "en_GB",
